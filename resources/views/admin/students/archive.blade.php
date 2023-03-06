@@ -1,0 +1,88 @@
+@extends('admin.layouts.master')
+@section('title','Archive')
+@section('breadcrumbs')
+<div class="breadcrumbs">
+    <div class="breadcrumbs-inner">
+        <div class="row m-0">
+            <div class="col-sm-4">
+                <div class="page-header float-left">
+                    <div class="page-title">
+                        <h1>Dashboard</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-8">
+                <div class="page-header float-right">
+                    <div class="page-title">
+                        <ol class="breadcrumb text-right">
+                            <li><a href="#">Archive</a></li>
+                            <li><a href="{{route('students.create')}}">Add Student</a></li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@endsection
+@section('content')
+<div class="content">
+    <div class="animated fadeIn">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-header">
+                        <strong class="card-title">Archive</strong>
+                    </div>
+                    <div class="card-body">
+                        @if(Session::has('msg'))
+                                <div class='alert alert-success'>{{Session::get('msg')}}</div>
+                            @endif
+                            @if(Session::has('danger'))
+                                <div class='alert alert-success'>{{Session::get('danger')}}</div>
+                            @endif
+                        <table class="table">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th scope="col">Code</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Email</th>
+                                    <th scope="col">Phone</th>
+                                    <th scope="col">Department</th>
+                                    <th scope="col">actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse ($students as $student)
+                                <tr>
+                                    <th scope="row">{{$student->id }}</th>
+                                    <td>{{$student->name }}</td>
+                                    <td>{{$student->email }}</td>
+                                    <td>{{$student->phone }}</td>
+                                    <td>{{$student->department->name}}</td>
+                                    
+                                    <td>
+                                        <a href="{{route('students.restore' , ['student'=>$student->id])}}" style="color:lightblue">Restore</a>
+                                        <form action="{{route('students.forceDestroy',$student->id)}} " method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <input type="submit" value='Delete'>
+                                        </form>
+                                        
+                                    </td>
+                                </tr>
+                                @empty
+                                <tr>
+                                    <td scope="row">No Data To Show!</td>
+                                </tr>
+                                @endforelse
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@endsection
